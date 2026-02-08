@@ -1,0 +1,418 @@
+2026-02-08 12:13:55,822 - reachy_mini.daemon.daemon - INFO - Daemon version: 1.3.0
+2026-02-08 12:13:55,871 - uvicorn.error - INFO - Started server process [1717]
+2026-02-08 12:13:55,871 - uvicorn.error - INFO - Waiting for application startup.
+2026-02-08 12:13:55,871 - root - INFO - Dataset updater started (interval: 24.0h)
+2026-02-08 12:13:55,871 - reachy_mini.daemon.daemon - INFO - Daemon start parameters: sim=False, mockup_sim=False, serialport=/dev/cu.usbmodem5AF71341681, scene=empty, localhost_only=True, wake_up_on_start=False, check_collision=False, kinematics_engine=AnalyticalKinematics, headless=False, hardware_config_filepath=/Users/meruem.ai/.openclaw/workspace/projects/fuelos-demo/.venv/lib/python3.12/site-packages/reachy_mini/assets/config/hardware_config.yaml
+2026-02-08 12:13:55,871 - reachy_mini.daemon.daemon - INFO - Starting Reachy Mini daemon...
+2026-02-08 12:13:55,871 - reachy_mini.daemon.daemon - INFO - Creating RobotBackend with parameters: serialport=/dev/cu.usbmodem5AF71341681, check_collision=False, kinematics_engine=AnalyticalKinematics
+Looking for motor with ID 10 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 10...[OK]
+Changing offset for motor with ID 10 to 0...[OK]
+Changing angle limits for motor with ID 10 to [0, 4095]...[OK]
+Changing shutdown error for motor with ID 10 to 52...[OK]
+Changing return delay time for motor with ID 10 to 0...[OK]
+Changing operating mode for motor with ID 10 to 3...[OK]
+Checking configuration...
+Found motor with ID 10 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [0, 4095] [OK].
+Homing offset is correct: 0 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 11 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 11...[OK]
+Changing offset for motor with ID 11 to 1024...[OK]
+Changing angle limits for motor with ID 11 to [1502, 2958]...[OK]
+Changing shutdown error for motor with ID 11 to 52...[OK]
+Changing return delay time for motor with ID 11 to 0...[OK]
+Changing operating mode for motor with ID 11 to 3...[OK]
+Checking configuration...
+Found motor with ID 11 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [1502, 2958] [OK].
+Homing offset is correct: 1024 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 12 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 12...[OK]
+Changing offset for motor with ID 12 to -1024...[OK]
+Changing angle limits for motor with ID 12 to [1138, 2844]...[OK]
+Changing shutdown error for motor with ID 12 to 52...[OK]
+Changing return delay time for motor with ID 12 to 0...[OK]
+Changing operating mode for motor with ID 12 to 3...[OK]
+Checking configuration...
+Found motor with ID 12 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [1138, 2844] [OK].
+Homing offset is correct: -1024 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 13 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 13...[OK]
+Changing offset for motor with ID 13 to 1024...[OK]
+Changing angle limits for motor with ID 13 to [1502, 2958]...[OK]
+Changing shutdown error for motor with ID 13 to 52...[OK]
+Changing return delay time for motor with ID 13 to 0...[OK]
+Changing operating mode for motor with ID 13 to 3...[OK]
+Checking configuration...
+Found motor with ID 13 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [1502, 2958] [OK].
+Homing offset is correct: 1024 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 14 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 14...[OK]
+Changing offset for motor with ID 14 to -1024...[OK]
+Changing angle limits for motor with ID 14 to [1138, 2594]...[OK]
+Changing shutdown error for motor with ID 14 to 52...[OK]
+Changing return delay time for motor with ID 14 to 0...[OK]
+Changing operating mode for motor with ID 14 to 3...[OK]
+Checking configuration...
+Found motor with ID 14 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [1138, 2594] [OK].
+Homing offset is correct: -1024 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 15 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 15...[OK]
+Changing offset for motor with ID 15 to 1024...[OK]
+Changing angle limits for motor with ID 15 to [1252, 2958]...[OK]
+Changing shutdown error for motor with ID 15 to 52...[OK]
+Changing return delay time for motor with ID 15 to 0...[OK]
+Changing operating mode for motor with ID 15 to 3...[OK]
+Checking configuration...
+Found motor with ID 15 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [1252, 2958] [OK].
+Homing offset is correct: 1024 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 16 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 16...[OK]
+Changing offset for motor with ID 16 to -1024...[OK]
+Changing angle limits for motor with ID 16 to [1138, 2594]...[OK]
+Changing shutdown error for motor with ID 16 to 52...[OK]
+Changing return delay time for motor with ID 16 to 0...[OK]
+Changing operating mode for motor with ID 16 to 3...[OK]
+Checking configuration...
+Found motor with ID 16 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [1138, 2594] [OK].
+Homing offset is correct: -1024 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 17 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 17...[OK]
+Changing offset for motor with ID 17 to 0...[OK]
+Changing angle limits for motor with ID 17 to [0, 4095]...[OK]
+Changing shutdown error for motor with ID 17 to 52...[OK]
+Changing return delay time for motor with ID 17 to 0...[OK]
+Changing operating mode for motor with ID 17 to 3...[OK]
+Checking configuration...
+Found motor with ID 17 [OK].
+Return delay time is correct: 0 [OK].
+Operating mode is correct: 3 [OK].
+Angle limits are correct: [0, 4095] [OK].
+Homing offset is correct: 0 [OK].
+Shutdown error is correct: 52 [OK].
+Configuration is correct [OK]!
+Looking for motor with ID 18 on port /dev/cu.usbmodem5AF71341681...[OK]
+Disabling torque for motor with ID 18...[OK]
+Changing offset for motor with ID 18 to 0...[OK]
+Changing angle limits for motor with ID 18 to [0, 4095]...[OK]
+Changing shutdown error for motor with ID 18 to 52...[OK]
+Changing return delay time for motor with ID 18 to 0...[OK]
+Changing operating mode for motor with ID 18 to 3...2026-02-08 12:14:03,846 - reachy_mini.daemon.backend.abstract - INFO - Using AnalyticalKinematics kinematics engine
+2026-02-08 12:14:03,864 - reachy_mini.media.media_manager - INFO - Using default media backend (SoundDevice only).
+2026-02-08 12:14:03,864 - reachy_mini.media.media_manager - INFO - Using SoundDevice audio backend.
+2026-02-08 12:14:03,970 - reachy_mini_motor_controller.control_loop - INFO - Waiting for voltage to be stable at 5V...
+2026-02-08 12:14:03,971 - reachy_mini_motor_controller.control_loop - INFO - Voltage is stable at ~5V: [75, 75, 74, 75, 75, 75, 75, 74, 75] (took 0ns)
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'body_rotation' (ID: 10): P=200, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'stewart_1' (ID: 11): P=300, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'stewart_2' (ID: 12): P=300, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'stewart_3' (ID: 13): P=300, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'stewart_4' (ID: 14): P=300, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'stewart_5' (ID: 15): P=300, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'stewart_6' (ID: 16): P=300, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'right_antenna' (ID: 17): P=200, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Setting PID gains for motor 'left_antenna' (ID: 18): P=200, I=0, D=0
+2026-02-08 12:14:03,982 - reachy_mini.daemon.backend.robot.backend - INFO - Motor control mode: MotorControlMode.Disabled
+2026-02-08 12:14:04,507 - reachy_mini.daemon.daemon - INFO - Daemon started successfully.
+2026-02-08 12:14:04,508 - uvicorn.error - INFO - Application startup complete.
+2026-02-08 12:14:04,510 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-02-08 12:14:10,001 - uvicorn.access - INFO - 127.0.0.1:49278 - "GET /docs HTTP/1.1" 200
+2026-02-08 12:29:47,254 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:06,786 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:07,365 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:07,907 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:08,220 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:08,782 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:08,784 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:08,788 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:09,166 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:09,168 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:09,172 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:09,506 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:09,509 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:09,512 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:10,465 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:10,881 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:11,424 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:11,426 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:11,430 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:11,827 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:12,460 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:12,940 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:12,942 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:12,944 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:13,387 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:13,390 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:13,392 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:13,933 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:14,470 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:14,873 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:15,350 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:15,353 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:15,355 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:15,947 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:16,447 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:16,987 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:17,384 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:17,388 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:17,390 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:17,724 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:18,287 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:18,768 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:19,261 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:19,662 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:19,664 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:19,668 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:20,163 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:20,165 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:20,167 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:20,707 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:20,991 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:21,511 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:21,513 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:21,516 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:21,951 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:22,567 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:22,569 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:22,571 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:23,150 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:23,668 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:23,670 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:23,673 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:24,152 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:24,541 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:24,543 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:24,545 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:24,956 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:24,958 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:24,960 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:25,473 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:25,474 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:25,475 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:25,879 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:26,261 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:26,687 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:30:46,216 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:12,976 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:13,547 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:13,876 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:14,464 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:14,468 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:14,470 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:14,767 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:15,360 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:15,666 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:16,003 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:16,587 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:16,589 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:16,593 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:16,894 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:16,897 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:16,899 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:17,255 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:17,811 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:18,188 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:18,759 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:19,091 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:19,094 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:19,096 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:19,623 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:19,625 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:19,627 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:19,986 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:20,280 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:20,283 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:20,285 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:20,851 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 12:47:21,221 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:21,879 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:22,465 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:22,467 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:22,471 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:22,929 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:22,931 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:22,934 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:23,449 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:23,451 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:23,454 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:23,709 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:23,711 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:23,729 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:24,222 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:24,487 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:25,063 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:25,064 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:25,066 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:25,439 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:26,013 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:26,404 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:26,861 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:27,259 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:27,809 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:28,190 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:28,194 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:28,197 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:28,647 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:28,649 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:28,651 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:29,148 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:29,150 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:29,155 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:29,557 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:29,956 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:30,592 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:31,002 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:31,646 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:31,649 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:31,652 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:32,108 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:32,109 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:32,111 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:32,739 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:32,742 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:32,744 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:33,195 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:33,340 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:33,699 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:33,707 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:33,958 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:34,076 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:34,465 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:34,471 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:34,475 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:34,591 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:34,872 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:34,906 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,306 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,309 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,312 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,312 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,314 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,316 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,716 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:35,889 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,085 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,088 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,090 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,145 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,148 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,150 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,493 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:36,714 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:37,064 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:37,076 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:37,477 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:37,596 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:37,889 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,055 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,439 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,440 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,443 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,446 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,813 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,813 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,815 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:38,818 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:39,213 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:39,222 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:39,574 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:39,845 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:39,849 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:39,851 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:40,146 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:40,230 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:40,595 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:40,633 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:40,635 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:40,638 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,000 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,002 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,007 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,115 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,116 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,118 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,405 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,408 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,410 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,515 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,521 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,523 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,923 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,925 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,927 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:41,962 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:42,342 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:42,727 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:42,729 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:42,731 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:42,941 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:43,341 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:43,343 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:43,345 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 13:07:43,374 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:09,379 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:09,383 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:09,388 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:09,824 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:10,476 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:10,736 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:11,198 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:11,565 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:12,084 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:12,087 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:12,090 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:12,394 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:12,396 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:12,398 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:12,789 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:13,360 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:13,790 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:14,310 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:14,674 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:15,294 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:15,904 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:16,335 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:16,600 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:16,603 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:16,605 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:17,561 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:17,954 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:18,238 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:18,880 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:18,885 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:18,888 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:19,253 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
+2026-02-08 14:05:19,542 - reachy_mini.daemon.backend.robot.backend - WARNING - Ignoring play_move request: another move is running.
