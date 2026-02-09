@@ -12,7 +12,7 @@ import time
 import math
 import json
 import random
-import struct
+import queue
 import signal
 from enum import Enum, auto
 from dataclasses import dataclass, field
@@ -21,10 +21,11 @@ from collections import deque
 
 import numpy as np
 import cv2
+import struct
 import pyaudio
 from ultralytics import YOLO
 from elevenlabs.client import ElevenLabs
-from elevenlabs.conversational_ai.conversation import Conversation, AudioInterface
+from elevenlabs.conversational_ai.conversation import Conversation, AudioInterface, ConversationInitiationData
 
 # =============================================================================
 # VOICE CONFIG
@@ -83,14 +84,23 @@ ENGAGEMENT_MIN_SIZE = 55.0
 # =============================================================================
 
 class ReachyAudioInterface(AudioInterface):
-    """Audio interface using Reachy Mini's mic and speaker"""
+    """Audio interface for Reachy Mini with pause/resume support"""
+    
+    # Small buffers for minimum latency
+    INPUT_FRAMES = 512   # 32ms @ 16kHz - fast response
+    OUTPUT_FRAMES = 512  # 32ms @ 16kHz
     
     def __init__(self):
         self.p = pyaudio.PyAudio()
         self.input_stream = None
         self.output_stream = None
         self.running = False
+        self.paused = False  # Pause flag - stops sending audio without closing
         self.input_callback = None
+        
+        # Output queue for interrupt support (small max size for low latency)
+        self.output_queue = queue.Queue(maxsize=10)
+        self.output_thread = None
         
         # Find Reachy audio device
         self.reachy_device = 0
@@ -98,52 +108,75 @@ class ReachyAudioInterface(AudioInterface):
             info = self.p.get_device_info_by_index(i)
             if "Reachy Mini Audio" in info['name']:
                 self.reachy_device = i
-                print(f"[Voice] Using Reachy audio device [{i}]: {info['name']}")
+                print(f"[Voice] Found Reachy audio [{i}]: {info['name']}")
                 break
     
-    def start(self, input_callback, sample_rate=16000, channels=1):
-        self.sample_rate = sample_rate
-        self.channels = channels
+    def start(self, input_callback):
         self.input_callback = input_callback
         self.running = True
+        self.paused = False
         
-        print(f"[Voice] Starting audio at {sample_rate}Hz...")
+        print("[Voice] Starting audio streams...")
         
+        # Input stream (mic) - stereo from hardware
         self.input_stream = self.p.open(
             format=pyaudio.paInt16,
             channels=2,
-            rate=sample_rate,
+            rate=16000,
             input=True,
             input_device_index=self.reachy_device,
-            frames_per_buffer=512
+            frames_per_buffer=self.INPUT_FRAMES
         )
         
+        # Output stream (speaker) - stereo to hardware
         self.output_stream = self.p.open(
             format=pyaudio.paInt16,
             channels=2,
-            rate=sample_rate,
+            rate=16000,
             output=True,
             output_device_index=self.reachy_device,
-            frames_per_buffer=512
+            frames_per_buffer=self.OUTPUT_FRAMES
         )
         
+        # Start input thread
         self.input_thread = threading.Thread(target=self._read_input, daemon=True)
         self.input_thread.start()
+        
+        # Start output thread (for interrupt support)
+        self.output_thread = threading.Thread(target=self._write_output, daemon=True)
+        self.output_thread.start()
+        
         print("[Voice] Audio started!")
     
     def _read_input(self):
+        """Read from mic and send to callback (unless paused)"""
         while self.running:
             try:
-                data = self.input_stream.read(512, exception_on_overflow=False)
-                samples = struct.unpack(f'{len(data)//2}h', data)
-                mono = samples[::2]
-                mono_data = struct.pack(f'{len(mono)}h', *mono)
-                if self.input_callback:
+                data = self.input_stream.read(self.INPUT_FRAMES, exception_on_overflow=False)
+                # Only send if not paused and callback exists
+                if not self.paused and self.input_callback:
+                    # Convert stereo to mono by taking left channel
+                    samples = struct.unpack(f'{len(data)//2}h', data)
+                    mono = samples[::2]
+                    mono_data = struct.pack(f'{len(mono)}h', *mono)
                     self.input_callback(mono_data)
             except Exception as e:
                 if self.running:
                     print(f"[Voice] Input error: {e}")
                 break
+    
+    def _write_output(self):
+        """Write queued audio to speaker immediately"""
+        while self.running:
+            try:
+                audio = self.output_queue.get(timeout=0.05)  # Fast polling
+                if self.output_stream and not self.paused:
+                    self.output_stream.write(audio)
+            except queue.Empty:
+                pass
+            except Exception as e:
+                if self.running:
+                    print(f"[Voice] Output error: {e}")
     
     def stop(self):
         self.running = False
@@ -157,85 +190,198 @@ class ReachyAudioInterface(AudioInterface):
         self.p.terminate()
     
     def output(self, audio_data: bytes):
-        if self.output_stream and audio_data:
+        """Queue audio for immediate playback"""
+        if audio_data and not self.paused:
             try:
+                # Convert mono int16 to stereo with volume boost
                 samples = struct.unpack(f'{len(audio_data)//2}h', audio_data)
                 boosted = []
                 for s in samples:
-                    boosted_sample = int(s * VOLUME_BOOST)
-                    boosted_sample = max(-32768, min(32767, boosted_sample))
-                    boosted.append(boosted_sample)
+                    b = int(s * VOLUME_BOOST)
+                    b = max(-32768, min(32767, b))
+                    boosted.append(b)
+                # Convert to stereo
                 stereo = []
                 for s in boosted:
                     stereo.extend([s, s])
                 stereo_data = struct.pack(f'{len(stereo)}h', *stereo)
-                self.output_stream.write(stereo_data)
+                # Non-blocking put - drop if queue full (prevents backup)
+                try:
+                    self.output_queue.put_nowait(stereo_data)
+                except queue.Full:
+                    pass  # Drop frame to prevent latency buildup
             except Exception as e:
                 print(f"[Voice] Output error: {e}")
     
     def interrupt(self):
-        pass
+        """Clear output queue to stop playback immediately"""
+        try:
+            while True:
+                self.output_queue.get_nowait()
+        except queue.Empty:
+            pass
+    
+    def pause(self):
+        """Pause audio streaming (keeps streams open)"""
+        self.paused = True
+        self.interrupt()  # Clear any pending output
+    
+    def resume(self):
+        """Resume audio streaming"""
+        self.paused = False
 
 
 class VoiceManager:
-    """Manages voice conversations with 11Labs"""
+    """Manages voice conversations with 11Labs - persistent session with pause/resume"""
     
-    def __init__(self, behavior_engine: 'BehaviorEngine'):
+    def __init__(self, behavior_engine: 'BehaviorEngine', voice_name: str = DEFAULT_VOICE):
         self.behavior = behavior_engine
         self.client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+        self.voice_name = voice_name
+        self.agent_id = VOICE_AGENTS.get(voice_name)
+        
+        # Audio interface (created once, never destroyed)
+        self.audio_interface = ReachyAudioInterface()
+        
+        # Conversation object
         self.conversation: Optional[Conversation] = None
-        self.audio_interface: Optional[ReachyAudioInterface] = None
+        
+        # State
+        self.session_active = False  # WebSocket connected
+        self.is_engaged = False      # Currently talking (not paused)
         self.is_speaking = False
         self.is_listening = False
-        self.in_conversation = False
         self._lock = threading.Lock()
+        
+        # Keep-alive thread for paused state
+        self._keepalive_thread = None
+        self._keepalive_stop = threading.Event()
+        
+        print(f"[Voice] Initialized with {voice_name}")
     
-    def start_conversation(self, voice_name: str = DEFAULT_VOICE):
-        """Start a voice conversation"""
+    def _create_conversation(self):
+        """Create conversation object with low-latency config"""
+        if not self.agent_id:
+            print(f"[Voice] Unknown voice: {self.voice_name}")
+            return
+        
+        # Low-latency configuration overrides
+        config = ConversationInitiationData(
+            conversation_config_override={
+                "tts": {
+                    "model_id": "eleven_flash_v2_5",  # Fastest TTS (~75ms)
+                },
+                "turn": {
+                    "turn_timeout": 10,  # Shorter timeout
+                    "turn_eagerness": "eager",  # Respond quickly
+                },
+            },
+            extra_body={
+                "temperature": 0.7,
+                "max_tokens": 150,  # Keep responses short
+            },
+        )
+        
+        self.conversation = Conversation(
+            self.client,
+            self.agent_id,
+            requires_auth=True,
+            audio_interface=self.audio_interface,
+            config=config,
+            callback_agent_response=self._on_agent_response,
+            callback_user_transcript=self._on_user_transcript,
+        )
+        print("[Voice] Created conversation with low-latency config (Flash TTS, eager turns)")
+    
+    def start_session(self):
+        """Start the persistent session (call once at startup)"""
         with self._lock:
-            if self.in_conversation:
-                print("[Voice] Already in conversation")
+            if self.session_active:
+                print("[Voice] Session already active")
                 return
-            
-            agent_id = VOICE_AGENTS.get(voice_name)
-            if not agent_id:
-                print(f"[Voice] Unknown voice: {voice_name}")
-                return
-            
-            print(f"[Voice] Starting conversation with {voice_name}...")
-            self.in_conversation = True
+        
+        self._create_conversation()
         
         try:
-            self.audio_interface = ReachyAudioInterface()
-            self.conversation = Conversation(
-                self.client,
-                agent_id,
-                requires_auth=True,
-                audio_interface=self.audio_interface,
-                callback_agent_response=self._on_agent_response,
-                callback_user_transcript=self._on_user_transcript,
-            )
+            print("[Voice] Starting persistent session...")
             self.conversation.start_session()
-            print("[Voice] Conversation started!")
+            self.session_active = True
+            # Start paused - will resume when engaged
+            self.audio_interface.pause()
+            self._start_keepalive()
+            print("[Voice] Session started (paused, waiting for engagement)")
         except Exception as e:
-            print(f"[Voice] Error starting conversation: {e}")
-            self.in_conversation = False
+            print(f"[Voice] Session start error: {e}")
+            self.session_active = False
     
-    def end_conversation(self):
-        """End the current conversation"""
+    def _start_keepalive(self):
+        """Start background thread to send user_activity during pause"""
+        self._keepalive_stop.clear()
+        self._keepalive_thread = threading.Thread(target=self._keepalive_loop, daemon=True)
+        self._keepalive_thread.start()
+    
+    def _keepalive_loop(self):
+        """Send user_activity every 5 seconds to prevent timeout"""
+        while not self._keepalive_stop.is_set():
+            if self.session_active and not self.is_engaged:
+                try:
+                    self.conversation.register_user_activity()
+                except Exception as e:
+                    print(f"[Voice] Keepalive error: {e}")
+            self._keepalive_stop.wait(5.0)  # Send every 5 seconds
+    
+    def engage(self):
+        """Resume audio streaming - user is close enough to talk"""
         with self._lock:
-            if not self.in_conversation:
+            if not self.session_active:
+                print("[Voice] No active session")
                 return
-            self.in_conversation = False
+            if self.is_engaged:
+                return
+            self.is_engaged = True
+        
+        self.audio_interface.resume()
+        print("[Voice] 🎤 Engaged - listening")
+    
+    def disengage(self):
+        """Pause audio streaming - user walked away"""
+        with self._lock:
+            if not self.is_engaged:
+                return
+            self.is_engaged = False
             self.is_speaking = False
             self.is_listening = False
         
-        if self.conversation:
-            try:
+        self.audio_interface.pause()
+        print("[Voice] ⏸️ Disengaged - paused (session kept alive)")
+    
+    def end_session(self):
+        """Fully end the session (call at shutdown)"""
+        self._keepalive_stop.set()
+        with self._lock:
+            if not self.session_active:
+                return
+            self.session_active = False
+            self.is_engaged = False
+        
+        try:
+            if self.conversation:
                 self.conversation.end_session()
-            except:
-                pass
-        print("[Voice] Conversation ended")
+        except Exception as e:
+            print(f"[Voice] End error: {e}")
+        
+        print("[Voice] Session ended")
+    
+    # Legacy aliases for compatibility
+    def start_conversation(self, voice_name: str = None):
+        """Alias for engage()"""
+        if not self.session_active:
+            self.start_session()
+        self.engage()
+    
+    def end_conversation(self):
+        """Alias for disengage() - does NOT end the session"""
+        self.disengage()
     
     def _on_agent_response(self, response):
         print(f"[Voice] 🤖 Agent: {response}")
@@ -455,18 +601,22 @@ class BehaviorEngine:
                 drowsy_progress = min(1.0, (idle_time - DROWSY_ONSET) / 20.0)
                 p.drowsy_amount = self._smooth_toward(p.drowsy_amount, drowsy_progress, 0.02)
             
-            # Random glances
+            # Return to center first, then random glances
             target_yaw = 0.0
             target_pitch = 0.0
-            if now > p.next_glance and not p.is_drowsy:
+            
+            # Only do glances once near center
+            at_center = abs(p.current_yaw) < 0.1 and abs(p.current_pitch) < 0.1
+            if at_center and now > p.next_glance and not p.is_drowsy:
                 # Do a glance
                 target_yaw = random.uniform(-GLANCE_AMOUNT, GLANCE_AMOUNT)
                 target_pitch = random.uniform(-GLANCE_AMOUNT * 0.5, GLANCE_AMOUNT * 0.5)
                 self._schedule_next_glance()
             
-            # Smooth movement
-            p.current_yaw = self._smooth_toward(p.current_yaw, target_yaw, 0.05)
-            p.current_pitch = self._smooth_toward(p.current_pitch, target_pitch, 0.05)
+            # Smooth movement - faster return to center (0.15 vs 0.05)
+            smooth_factor = 0.15 if not at_center else 0.05
+            p.current_yaw = self._smooth_toward(p.current_yaw, target_yaw, smooth_factor)
+            p.current_pitch = self._smooth_toward(p.current_pitch, target_pitch, smooth_factor)
             
             pitch = p.current_pitch + breath - (p.drowsy_amount * DROWSY_DROOP)
             yaw = p.current_yaw
@@ -624,9 +774,14 @@ class CameraWorker:
         self._model = YOLO(model_path)
         print("[Camera] YOLO model loaded")
         
+        # OpenCV camera (Reachy camera is device 0)
+        self._cap = cv2.VideoCapture(0)
+        if self._cap.isOpened():
+            print("[Camera] OpenCV camera opened")
+        else:
+            print("[Camera] WARNING: Could not open camera")
+        
         # Camera intrinsics (Sony IMX708, 120° diagonal FOV)
-        # For 120° horizontal FOV: fx = (width/2) / tan(half_fov)
-        # 120° horizontal → half = 60° → fx = 160 / tan(60°) ≈ 92.4
         self._hfov = 120  # degrees horizontal
         self._fx = 160 / math.tan(math.radians(self._hfov / 2))
         self._fy = self._fx
@@ -636,6 +791,17 @@ class CameraWorker:
         # Callbacks
         self._engagement_callback: Optional[Callable[[bool], None]] = None
         self._was_engaged = False
+        self._engaged_since = 0.0
+        self._disengaged_since = 0.0
+        self._voice_active = False
+    
+    def _capture_frame(self) -> Optional[np.ndarray]:
+        """Capture frame from OpenCV camera"""
+        if self._cap and self._cap.isOpened():
+            ret, frame = self._cap.read()
+            if ret:
+                return frame
+        return None
     
     def set_engagement_callback(self, callback: Callable[[bool], None]):
         """Set callback for engagement state changes"""
@@ -675,8 +841,8 @@ class CameraWorker:
             start = time.perf_counter()
             
             try:
-                # Capture frame
-                frame = self.reachy.media.get_frame()
+                # Capture frame from OpenCV camera
+                frame = self._capture_frame()
                 if frame is None:
                     time.sleep(period)
                     continue
@@ -713,15 +879,30 @@ class CameraWorker:
                 # Update behavior
                 roll, pitch, yaw, antennas = self.behavior.update(detection)
                 
-                # Check engagement callback
+                # Check engagement callback with hysteresis
                 is_engaged = self.behavior.personality.state == State.ENGAGED
-                if is_engaged != self._was_engaged:
-                    self._was_engaged = is_engaged
-                    if self._engagement_callback:
-                        try:
-                            self._engagement_callback(is_engaged)
-                        except Exception as e:
-                            print(f"[Callback] Error: {e}")
+                now = time.time()
+                
+                if is_engaged:
+                    self._engaged_since = now
+                    # Start voice after 0.5s of sustained engagement
+                    if not self._voice_active and (now - self._disengaged_since) > 0.5:
+                        self._voice_active = True
+                        if self._engagement_callback:
+                            try:
+                                self._engagement_callback(True)
+                            except Exception as e:
+                                print(f"[Callback] Error: {e}")
+                else:
+                    self._disengaged_since = now
+                    # Only stop voice after 3s of no engagement (prevents jitter)
+                    if self._voice_active and (now - self._engaged_since) > 3.0:
+                        self._voice_active = False
+                        if self._engagement_callback:
+                            try:
+                                self._engagement_callback(False)
+                            except Exception as e:
+                                print(f"[Callback] Error: {e}")
                 
                 # Store output
                 with self._lock:
@@ -975,8 +1156,9 @@ async def startup():
     
     from reachy_mini import ReachyMini
     
-    reachy = ReachyMini(media_backend="default")
-    print("[Main] Reachy connected")
+    # Use no_media so pyaudio can access the audio device
+    reachy = ReachyMini(media_backend="no_media")
+    print("[Main] Reachy connected (no_media for voice)")
     
     camera_worker = CameraWorker(reachy)
     camera_worker.start()
@@ -984,14 +1166,23 @@ async def startup():
     movement = MovementManager(reachy, camera_worker)
     movement.start()
     
-    # Voice disabled - pyaudio causes segfaults
-    # TODO: Fix voice integration separately
+    # Voice manager - persistent session with pause/resume
+    voice_manager = VoiceManager(camera_worker.behavior)
+    voice_manager.start_session()  # Start session once, keep alive forever
     
     def on_engagement(engaged: bool):
         if engaged:
-            print("[Main] 🎯 ENGAGED!")
+            print("[Main] 🎯 ENGAGED — resuming voice!")
+            try:
+                voice_manager.engage()
+            except Exception as e:
+                print(f"[Main] Voice error: {e}")
         else:
-            print("[Main] Disengaged")
+            print("[Main] Disengaged — pausing voice")
+            try:
+                voice_manager.disengage()
+            except Exception as e:
+                print(f"[Main] Voice pause error: {e}")
     
     camera_worker.set_engagement_callback(on_engagement)
     
