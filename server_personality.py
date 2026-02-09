@@ -56,8 +56,8 @@ TRACKING_LAG = 0.85         # Intentional lag for organic feel
 
 # Zone thresholds (face box height in pixels at 320x180)
 # Only track close faces - ignore distant ones
-TRACKING_MIN_SIZE = 55.0
-ENGAGEMENT_MIN_SIZE = 70.0
+TRACKING_MIN_SIZE = 35.0
+ENGAGEMENT_MIN_SIZE = 55.0
 
 
 # =============================================================================
@@ -510,7 +510,7 @@ class CameraWorker:
                     size = box[3] - box[1]  # Height
                     
                     # Convert to angles
-                    yaw = math.atan2(cx - self._cx, self._fx)
+                    yaw = -math.atan2(cx - self._cx, self._fx)
                     pitch = math.atan2(cy - self._cy, self._fy)
                     
                     detection = (yaw, pitch, float(size))
