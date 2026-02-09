@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-FuelOS Demo Companion — Personality Server
+FuelOS Demo Companion — Personality Server + Voice
 
 Character: Curious young creature discovering humans
 Philosophy: Stillness is presence. Movement is earned. Attention is a gift.
@@ -12,6 +12,8 @@ import time
 import math
 import json
 import random
+import struct
+import signal
 from enum import Enum, auto
 from dataclasses import dataclass, field
 from typing import Optional, Callable, Tuple, List
@@ -19,7 +21,23 @@ from collections import deque
 
 import numpy as np
 import cv2
+import pyaudio
 from ultralytics import YOLO
+from elevenlabs.client import ElevenLabs
+from elevenlabs.conversational_ai.conversation import Conversation, AudioInterface
+
+# =============================================================================
+# VOICE CONFIG
+# =============================================================================
+
+ELEVENLABS_API_KEY = "sk_995fb89693eec0150baa8f37e91be1783a4c1e407d15b437"
+VOICE_AGENTS = {
+    "Callum": "agent_1201kgz84rm2fr080e4t12zsp3m8",
+    "Laura": "agent_4601kgz84sg1evgt11vdcejzf3wq",
+    "Jessica": "agent_2701kgz84tcvejw90b8qt1mpemdk",
+}
+DEFAULT_VOICE = "Callum"
+VOLUME_BOOST = 3.0
 
 # =============================================================================
 # PERSONALITY CONSTANTS
@@ -58,6 +76,176 @@ TRACKING_LAG = 0.85         # Intentional lag for organic feel
 # Only track close faces - ignore distant ones
 TRACKING_MIN_SIZE = 35.0
 ENGAGEMENT_MIN_SIZE = 55.0
+
+
+# =============================================================================
+# VOICE INTERFACE
+# =============================================================================
+
+class ReachyAudioInterface(AudioInterface):
+    """Audio interface using Reachy Mini's mic and speaker"""
+    
+    def __init__(self):
+        self.p = pyaudio.PyAudio()
+        self.input_stream = None
+        self.output_stream = None
+        self.running = False
+        self.input_callback = None
+        
+        # Find Reachy audio device
+        self.reachy_device = 0
+        for i in range(self.p.get_device_count()):
+            info = self.p.get_device_info_by_index(i)
+            if "Reachy Mini Audio" in info['name']:
+                self.reachy_device = i
+                print(f"[Voice] Using Reachy audio device [{i}]: {info['name']}")
+                break
+    
+    def start(self, input_callback, sample_rate=16000, channels=1):
+        self.sample_rate = sample_rate
+        self.channels = channels
+        self.input_callback = input_callback
+        self.running = True
+        
+        print(f"[Voice] Starting audio at {sample_rate}Hz...")
+        
+        self.input_stream = self.p.open(
+            format=pyaudio.paInt16,
+            channels=2,
+            rate=sample_rate,
+            input=True,
+            input_device_index=self.reachy_device,
+            frames_per_buffer=512
+        )
+        
+        self.output_stream = self.p.open(
+            format=pyaudio.paInt16,
+            channels=2,
+            rate=sample_rate,
+            output=True,
+            output_device_index=self.reachy_device,
+            frames_per_buffer=512
+        )
+        
+        self.input_thread = threading.Thread(target=self._read_input, daemon=True)
+        self.input_thread.start()
+        print("[Voice] Audio started!")
+    
+    def _read_input(self):
+        while self.running:
+            try:
+                data = self.input_stream.read(512, exception_on_overflow=False)
+                samples = struct.unpack(f'{len(data)//2}h', data)
+                mono = samples[::2]
+                mono_data = struct.pack(f'{len(mono)}h', *mono)
+                if self.input_callback:
+                    self.input_callback(mono_data)
+            except Exception as e:
+                if self.running:
+                    print(f"[Voice] Input error: {e}")
+                break
+    
+    def stop(self):
+        self.running = False
+        time.sleep(0.1)
+        if self.input_stream:
+            self.input_stream.stop_stream()
+            self.input_stream.close()
+        if self.output_stream:
+            self.output_stream.stop_stream()
+            self.output_stream.close()
+        self.p.terminate()
+    
+    def output(self, audio_data: bytes):
+        if self.output_stream and audio_data:
+            try:
+                samples = struct.unpack(f'{len(audio_data)//2}h', audio_data)
+                boosted = []
+                for s in samples:
+                    boosted_sample = int(s * VOLUME_BOOST)
+                    boosted_sample = max(-32768, min(32767, boosted_sample))
+                    boosted.append(boosted_sample)
+                stereo = []
+                for s in boosted:
+                    stereo.extend([s, s])
+                stereo_data = struct.pack(f'{len(stereo)}h', *stereo)
+                self.output_stream.write(stereo_data)
+            except Exception as e:
+                print(f"[Voice] Output error: {e}")
+    
+    def interrupt(self):
+        pass
+
+
+class VoiceManager:
+    """Manages voice conversations with 11Labs"""
+    
+    def __init__(self, behavior_engine: 'BehaviorEngine'):
+        self.behavior = behavior_engine
+        self.client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+        self.conversation: Optional[Conversation] = None
+        self.audio_interface: Optional[ReachyAudioInterface] = None
+        self.is_speaking = False
+        self.is_listening = False
+        self.in_conversation = False
+        self._lock = threading.Lock()
+    
+    def start_conversation(self, voice_name: str = DEFAULT_VOICE):
+        """Start a voice conversation"""
+        with self._lock:
+            if self.in_conversation:
+                print("[Voice] Already in conversation")
+                return
+            
+            agent_id = VOICE_AGENTS.get(voice_name)
+            if not agent_id:
+                print(f"[Voice] Unknown voice: {voice_name}")
+                return
+            
+            print(f"[Voice] Starting conversation with {voice_name}...")
+            self.in_conversation = True
+        
+        try:
+            self.audio_interface = ReachyAudioInterface()
+            self.conversation = Conversation(
+                self.client,
+                agent_id,
+                requires_auth=True,
+                audio_interface=self.audio_interface,
+                callback_agent_response=self._on_agent_response,
+                callback_user_transcript=self._on_user_transcript,
+            )
+            self.conversation.start_session()
+            print("[Voice] Conversation started!")
+        except Exception as e:
+            print(f"[Voice] Error starting conversation: {e}")
+            self.in_conversation = False
+    
+    def end_conversation(self):
+        """End the current conversation"""
+        with self._lock:
+            if not self.in_conversation:
+                return
+            self.in_conversation = False
+            self.is_speaking = False
+            self.is_listening = False
+        
+        if self.conversation:
+            try:
+                self.conversation.end_session()
+            except:
+                pass
+        print("[Voice] Conversation ended")
+    
+    def _on_agent_response(self, response):
+        print(f"[Voice] 🤖 Agent: {response}")
+        self.is_speaking = True
+        self.is_listening = False
+    
+    def _on_user_transcript(self, transcript):
+        print(f"[Voice] 👤 User: {transcript}")
+        self.is_speaking = False
+        self.is_listening = True
 
 
 # =============================================================================
@@ -552,7 +740,7 @@ class CameraWorker:
 # =============================================================================
 
 class MovementManager:
-    """Applies computed movements to robot"""
+    """Applies computed movements to robot — body moves organically"""
     
     def __init__(self, reachy, camera_worker: CameraWorker):
         self.reachy = reachy
@@ -565,6 +753,10 @@ class MovementManager:
         self._create = create_head_pose
         self._compose = compose_world_offset
         self._neutral = create_head_pose(0, 0, 0, 0, 0, 0, degrees=True)
+        
+        # Body state — lazy, organic movement
+        self.body_yaw = 0.0
+        self.body_drift = 0.0  # Slow accumulated drift toward attention
     
     def start(self):
         self._stop.clear()
@@ -587,6 +779,7 @@ class MovementManager:
                 off = self.camera_worker.get_output()
                 antennas = self.camera_worker.get_antennas()
                 
+                # Head moves directly — no compensation
                 pose = self._create(
                     x=off[0], y=off[1], z=off[2],
                     roll=off[3], pitch=off[4], yaw=off[5],
@@ -594,6 +787,8 @@ class MovementManager:
                 )
                 
                 combined = self._compose(self._neutral, pose, reorthonormalize=True)
+                
+                # Body tracking disabled for now
                 self.reachy.set_target(head=combined, antennas=antennas)
                 
             except Exception as e:
@@ -615,6 +810,7 @@ import base64
 
 app = FastAPI()
 camera_worker: Optional[CameraWorker] = None
+voice_manager: Optional[VoiceManager] = None
 
 HTML = """
 <!DOCTYPE html>
@@ -756,10 +952,10 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @app.on_event("startup")
 async def startup():
-    global camera_worker
+    global camera_worker, voice_manager
     
     print("=" * 60)
-    print("FuelOS PERSONALITY SERVER")
+    print("FuelOS PERSONALITY SERVER + VOICE")
     print("=" * 60)
     print("Character: Curious young creature discovering humans")
     print("Philosophy: Stillness is presence. Movement is earned.")
@@ -775,6 +971,18 @@ async def startup():
     
     movement = MovementManager(reachy, camera_worker)
     movement.start()
+    
+    # Voice manager (disabled for now - pyaudio crash)
+    # voice_manager = VoiceManager(camera_worker.behavior)
+    
+    # Hook engagement callback
+    def on_engagement(engaged: bool):
+        if engaged:
+            print("[Main] 🎯 ENGAGED! (voice disabled for now)")
+        else:
+            print("[Main] Engagement ended")
+    
+    camera_worker.set_engagement_callback(on_engagement)
     
     print("[Main] Ready — http://0.0.0.0:8080")
 
