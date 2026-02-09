@@ -624,11 +624,14 @@ class CameraWorker:
         self._model = YOLO(model_path)
         print("[Camera] YOLO model loaded")
         
-        # Camera intrinsics (Sony IMX708, 120° FOV at 320x180)
-        self._fx = 160 / math.tan(math.radians(60))
+        # Camera intrinsics (Sony IMX708, 120° diagonal FOV)
+        # For 120° horizontal FOV: fx = (width/2) / tan(half_fov)
+        # 120° horizontal → half = 60° → fx = 160 / tan(60°) ≈ 92.4
+        self._hfov = 120  # degrees horizontal
+        self._fx = 160 / math.tan(math.radians(self._hfov / 2))
         self._fy = self._fx
-        self._cx = 160
-        self._cy = 90
+        self._cx = 160  # center x
+        self._cy = 90   # center y
         
         # Callbacks
         self._engagement_callback: Optional[Callable[[bool], None]] = None
@@ -754,9 +757,10 @@ class MovementManager:
         self._compose = compose_world_offset
         self._neutral = create_head_pose(0, 0, 0, 0, 0, 0, degrees=True)
         
-        # Body state — lazy, organic movement
+        # Body state — lazy, organic "settling" movement
         self.body_yaw = 0.0
-        self.body_drift = 0.0  # Slow accumulated drift toward attention
+        self.attention_accumulator = 0.0  # Builds up when looking one direction
+        self.last_settle_time = time.time()
     
     def start(self):
         self._stop.clear()
@@ -778,18 +782,26 @@ class MovementManager:
             try:
                 off = self.camera_worker.get_output()
                 antennas = self.camera_worker.get_antennas()
+                head_yaw = off[5]
                 
-                # Head moves directly — no compensation
+                # Head moves directly
                 pose = self._create(
                     x=off[0], y=off[1], z=off[2],
-                    roll=off[3], pitch=off[4], yaw=off[5],
+                    roll=off[3], pitch=off[4], yaw=head_yaw,
                     degrees=False, mm=False
                 )
-                
                 combined = self._compose(self._neutral, pose, reorthonormalize=True)
                 
-                # Body tracking disabled for now
-                self.reachy.set_target(head=combined, antennas=antennas)
+                # Body: organic "settling" — like creature shifting weight
+                # Accumulate attention direction (very slowly)
+                self.attention_accumulator += head_yaw * 0.001
+                self.attention_accumulator *= 0.998  # Slow decay
+                self.attention_accumulator = max(-0.8, min(0.8, self.attention_accumulator))
+                
+                # Body follows accumulated attention (glacier slow)
+                self.body_yaw += (self.attention_accumulator - self.body_yaw) * 0.005
+                
+                self.reachy.set_target(head=combined, antennas=antennas, body_yaw=self.body_yaw)
                 
             except Exception as e:
                 pass
@@ -972,15 +984,14 @@ async def startup():
     movement = MovementManager(reachy, camera_worker)
     movement.start()
     
-    # Voice manager (disabled for now - pyaudio crash)
-    # voice_manager = VoiceManager(camera_worker.behavior)
+    # Voice disabled - pyaudio causes segfaults
+    # TODO: Fix voice integration separately
     
-    # Hook engagement callback
     def on_engagement(engaged: bool):
         if engaged:
-            print("[Main] 🎯 ENGAGED! (voice disabled for now)")
+            print("[Main] 🎯 ENGAGED!")
         else:
-            print("[Main] Engagement ended")
+            print("[Main] Disengaged")
     
     camera_worker.set_engagement_callback(on_engagement)
     
